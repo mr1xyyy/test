@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Siz ahmoqmisiz?</title>
+  <style>
+    html,body{
+      height:100%;
+      margin:0;
+      font-family:Inter,system-ui;
+      background:linear-gradient(180deg,#f5f7fb,#eef2f7);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .container{
+      text-align:center;
+      background:#fff;
+      padding:40px 50px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    }
+    h1{
+      margin-bottom:25px;
+      font-size:28px;
+    }
+    .btns{
+      position:relative;
+      height:120px;
+    }
+    button{
+      padding:12px 24px;
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+    #yes{
+      background:linear-gradient(90deg,#7c74ff,#5fb0ff);
+      color:#fff;
+      margin-left:15px;
+    }
+    #no{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      background:#fff;
+      border:1px solid #ddd;
+    }
+    #result{
+      margin-top:20px;
+      font-size:18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Siz ahmoqmisiz?</h1>
+    <div class="btns">
+      <button id="no">Yo‘q</button>
+      <button id="yes">Ha</button>
+    </div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const no=document.getElementById('no');
+    const yes=document.getElementById('yes');
+    const btns=document.querySelector('.btns');
+    const result=document.getElementById('result');
+
+    no.addEventListener('mouseover',()=>{
+      const rect=btns.getBoundingClientRect();
+      const btnW=no.offsetWidth;
+      const btnH=no.offsetHeight;
+      const newX=Math.random()*(rect.width-btnW);
+      const newY=Math.random()*(rect.height-btnH);
+      no.style.left=newX+'px';
+      no.style.top=newY+'px';
+    });
+
+    no.addEventListener('click',e=>{
+      e.preventDefault();
+      no.dispatchEvent(new Event('mouseover'));
+    });
+
+    yes.addEventListener('click',()=>{
+      btns.style.display='none';
+      result.textContent='Biz ham shunday deb o‘ylagan edik 😄';
+    });
+  </script>
+</body>
+</html>
