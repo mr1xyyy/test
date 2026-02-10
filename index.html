@@ -1,95 +1,163 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Siz ahmoqmisiz?</title>
+  <title>Небольшой опрос</title>
   <style>
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:Inter,system-ui;
-      background:linear-gradient(180deg,#f5f7fb,#eef2f7);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+    :root {
+      --bg-start: #eef5ff;
+      --bg-end: #f7f3ff;
+      --card: #ffffff;
+      --text-main: #1f2a44;
+      --text-muted: #5e6b85;
+      --accent-start: #6f7cff;
+      --accent-end: #50b7ff;
+      --border: #dfe5f2;
     }
-    .container{
-      text-align:center;
-      background:#fff;
-      padding:40px 50px;
-      border-radius:16px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+
+    * {
+      box-sizing: border-box;
     }
-    h1{
-      margin-bottom:25px;
-      font-size:28px;
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #ffffff 0%, var(--bg-start) 45%, var(--bg-end) 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
     }
-    .btns{
-      position:relative;
-      height:120px;
+
+    .container {
+      width: min(92vw, 520px);
+      text-align: center;
+      background: var(--card);
+      padding: 36px 28px;
+      border-radius: 20px;
+      box-shadow: 0 14px 40px rgba(45, 70, 130, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.7);
     }
-    button{
-      padding:12px 24px;
-      border:none;
-      border-radius:10px;
-      font-size:16px;
-      cursor:pointer;
-      transition:0.2s;
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4253d5;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
     }
-    #yes{
-      background:linear-gradient(90deg,#7c74ff,#5fb0ff);
-      color:#fff;
-      margin-left:15px;
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4.8vw, 34px);
+      line-height: 1.25;
     }
-    #no{
-      position:absolute;
-      left:50%;
-      top:50%;
-      transform:translate(-50%,-50%);
-      background:#fff;
-      border:1px solid #ddd;
+
+    .subtitle {
+      margin: 10px auto 28px;
+      max-width: 36ch;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.45;
     }
-    #result{
-      margin-top:20px;
-      font-size:18px;
+
+    .btns {
+      position: relative;
+      height: 132px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.2s ease;
+      padding: 12px 26px;
+    }
+
+    button:focus-visible {
+      outline: 3px solid rgba(111, 124, 255, 0.35);
+      outline-offset: 2px;
+    }
+
+    #yes {
+      color: #fff;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      margin-left: 16px;
+      box-shadow: 0 8px 20px rgba(79, 127, 255, 0.32);
+    }
+
+    #yes:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(79, 127, 255, 0.36);
+    }
+
+    #no {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      color: #4f5e7a;
+      border: 1px solid var(--border);
+    }
+
+    #result {
+      margin-top: 22px;
+      min-height: 26px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #2f49d1;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Siz ahmoqmisiz?</h1>
-    <div class="btns">
-      <button id="no">Yo‘q</button>
-      <button id="yes">Ha</button>
+    <span class="badge">Мини-игра</span>
+    <h1>Вам нравится этот интерфейс?</h1>
+    <p class="subtitle">Нажмите «Да», если дизайн стал приятнее и язык теперь на русском.</p>
+
+    <div class="btns" aria-label="Варианты ответа">
+      <button id="no" type="button">Нет</button>
+      <button id="yes" type="button">Да</button>
     </div>
-    <div id="result"></div>
+
+    <div id="result" aria-live="polite"></div>
   </div>
 
   <script>
-    const no=document.getElementById('no');
-    const yes=document.getElementById('yes');
-    const btns=document.querySelector('.btns');
-    const result=document.getElementById('result');
+    const no = document.getElementById('no');
+    const yes = document.getElementById('yes');
+    const btns = document.querySelector('.btns');
+    const result = document.getElementById('result');
 
-    no.addEventListener('mouseover',()=>{
-      const rect=btns.getBoundingClientRect();
-      const btnW=no.offsetWidth;
-      const btnH=no.offsetHeight;
-      const newX=Math.random()*(rect.width-btnW);
-      const newY=Math.random()*(rect.height-btnH);
-      no.style.left=newX+'px';
-      no.style.top=newY+'px';
+    no.addEventListener('mouseover', () => {
+      const rect = btns.getBoundingClientRect();
+      const btnW = no.offsetWidth;
+      const btnH = no.offsetHeight;
+      const newX = Math.random() * (rect.width - btnW);
+      const newY = Math.random() * (rect.height - btnH);
+      no.style.left = `${newX}px`;
+      no.style.top = `${newY}px`;
     });
 
-    no.addEventListener('click',e=>{
-      e.preventDefault();
+    no.addEventListener('click', (event) => {
+      event.preventDefault();
       no.dispatchEvent(new Event('mouseover'));
     });
 
-    yes.addEventListener('click',()=>{
-      btns.style.display='none';
-      result.textContent='Biz ham shunday deb o‘ylagan edik 😄';
+    yes.addEventListener('click', () => {
+      btns.style.display = 'none';
+      result.textContent = 'Отлично! Спасибо за подтверждение ✨';
     });
   </script>
 </body>
